@@ -9,44 +9,8 @@ import {firstLetterCaps} from '@/utils/utils.ts';
 import type {ButtonNextState, ButtonState, TileButtonContent} from "@/data/schema.ts";
 import type {Variant} from "react-bootstrap/types";
 import type {ActionRequest, ActionRequestKind} from "@/types/api.ts";
+import {runAction} from "@/utils/utils.ts";
 
-enum ActiveSequence {
-  NONE = "NONE",
-  CHOOSE_WORKER = "CHOOSE_WORKER",
-  CHOOSE_SCAB = "CHOOSE_SCAB",
-  HELP_UNION = "HELP_UNION",
-  REJECT_UNION = "REJECT_UNION",
-  JOIN_UNION = "JOIN_UNION",
-  DESTROY_UNION = "DESTROY_UNION"
-}
-
-enum ActivePhase {
-  CHOOSE_SIDE = "CHOOSE_SIDE",
-  SCAB_CHOICES = "SCAB_CHOICES",
-  WORKER_CHOICES = "WORKER_CHOICES",
-  END = "END"
-}
-
-const positiveSequences = [ActiveSequence.CHOOSE_WORKER, ActiveSequence.HELP_UNION, ActiveSequence.JOIN_UNION];
-
-// Sequence options allowed per phase
-const phaseSequenceOptions: Record<ActivePhase, ActiveSequence[]> = {
-  [ActivePhase.CHOOSE_SIDE]: [ActiveSequence.CHOOSE_WORKER, ActiveSequence.CHOOSE_SCAB],
-  [ActivePhase.WORKER_CHOICES]: [ActiveSequence.HELP_UNION, ActiveSequence.REJECT_UNION],
-  [ActivePhase.SCAB_CHOICES]: [ActiveSequence.JOIN_UNION, ActiveSequence.DESTROY_UNION],
-  [ActivePhase.END]: []
-}
-
-// Phase progression from each sequence chosen
-const phaseProgression: Record<ActiveSequence, ActivePhase> = {
-  [ActiveSequence.NONE]: ActivePhase.CHOOSE_SIDE,
-  [ActiveSequence.CHOOSE_WORKER]: ActivePhase.WORKER_CHOICES,
-  [ActiveSequence.CHOOSE_SCAB]: ActivePhase.SCAB_CHOICES,
-  [ActiveSequence.HELP_UNION]: ActivePhase.END,
-  [ActiveSequence.REJECT_UNION]: ActivePhase.END,
-  [ActiveSequence.JOIN_UNION]: ActivePhase.END,
-  [ActiveSequence.DESTROY_UNION]: ActivePhase.END
-}
 
 interface ButtonAction {
   kind: ActionRequestKind;
@@ -66,27 +30,6 @@ if (useButtonStates) {
   }
 }
 
-const runAction = async (kind: ActionRequestKind, id: string) => {
-  try {
-    const response = await fetch('/api/action', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({kind, id})
-    });
-    if (!response.ok) {
-      console.error(`API error running action ${id}: ${response}`);
-      return;
-    }
-    const data = await response.json();
-    if ('message' in data) {
-      console.log(` [API] ${data.message()}`);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 const Sequences = () => {
 
@@ -129,7 +72,7 @@ const Sequences = () => {
         <strong>Selection State: </strong> <br/>
         <Badge bg={'primary'}>{buttonStatesMap.get(activeButtonState)!.title}</Badge> <br/>
       </>}
-      <strong>Action: {selectedAction && firstLetterCaps(selectedAction.kind)}</strong> <br/>
+      <strong>Action: </strong>{selectedAction && firstLetterCaps(selectedAction.kind)} <br/>
       {selectedAction && <Badge bg={selectedAction.badgeColor}>{selectedAction.actionId}</Badge>}
     </ButtonPanel>
   );

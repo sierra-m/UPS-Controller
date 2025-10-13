@@ -112,7 +112,7 @@ robotsPanel:
       taskId: task_mqtt_robots_die
     - id: button_robots_reset
       title: Reset
-      iconName: emoji-dizzy-fill
+      iconName: x-circle-fill
       variant: outline-danger
       taskId: task_mqtt_robots_reset
 tasks:
