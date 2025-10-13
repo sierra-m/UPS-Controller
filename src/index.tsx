@@ -1,9 +1,19 @@
 import { serve } from "bun";
 import Ajv, {type JSONSchemaType} from "ajv";
+import mqtt from 'mqtt';
+
 import index from "./index.html";
 import content, {taskIds, sequenceIds} from '@/utils/content.ts';
 import type {ActionRequest} from "@/types/api.ts";
+import {mqttHost, mqttPort} from "@/config.ts";
 
+
+console.log(`Connecting to MQTT broker ${mqttHost}:${mqttPort}...`);
+const mqttClient = mqtt.connect({
+  host: mqttHost,
+  port: mqttPort
+});
+console.log('Connected to broker.')
 
 const actionRequestSchema: JSONSchemaType<ActionRequest> = {
   type: 'object',
@@ -27,6 +37,7 @@ const runTask = async (id: string) => {
   if (foundTask) {
     if (foundTask.taskType === 'mqtt') {
       console.log(` [TASK] (MQTT) ${foundTask.id}: Publishing command '${foundTask.command}' to topic '${foundTask.topic}'`);
+      mqttClient.publish(foundTask.topic, foundTask.command);
     } else if (foundTask.taskType === 'commandLine') {
       console.log(` [TASK] (CLI) ${foundTask.id}: Executing command '${foundTask.command}'`);
     }
