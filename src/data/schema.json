@@ -8,6 +8,9 @@
         "sequencePanel": {
           "$ref": "#/definitions/SequencePanelContent"
         },
+        "robotsPanel": {
+          "$ref": "#/definitions/RobotsPanelContent"
+        },
         "tasks": {
           "type": "array",
           "items": {
@@ -23,6 +26,7 @@
       },
       "required": [
         "sequencePanel",
+        "robotsPanel",
         "tasks",
         "sequences"
       ],
@@ -184,6 +188,21 @@
       "required": [
         "buttonId",
         "nextStateId"
+      ],
+      "additionalProperties": false
+    },
+    "RobotsPanelContent": {
+      "type": "object",
+      "properties": {
+        "buttons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TileButtonContent"
+          }
+        }
+      },
+      "required": [
+        "buttons"
       ],
       "additionalProperties": false
     },

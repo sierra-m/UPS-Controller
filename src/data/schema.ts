@@ -46,8 +46,13 @@ export interface SequencePanelContent {
   buttonNextStates?: ButtonNextState[];
 }
 
+export interface RobotsPanelContent {
+  buttons: TileButtonContent[];
+}
+
 export interface ControlPanelContent {
   sequencePanel: SequencePanelContent;
+  robotsPanel: RobotsPanelContent;
   tasks: ControlTask[];
   sequences: ControlSequence[];
 }
