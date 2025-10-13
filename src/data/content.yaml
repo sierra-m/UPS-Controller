@@ -1,0 +1,114 @@
+sequencePanel:
+  buttons:
+    - id: button_choose_worker
+      title: Chooses Worker
+      iconName: emoji-smile-fill
+      variant: outline-primary
+      sequenceId: sequence_choose_workers
+    - id: button_help_union
+      title: Help Union
+      iconName: hand-thumbs-up-fill
+      variant: outline-primary
+      sequenceId: sequence_help_union
+    - id: button_join_union
+      title: Join Union
+      iconName: hammer
+      variant: outline-primary
+    - id: button_reset
+      title: Reset
+      iconName: x-circle-fill
+      variant: outline-danger
+      taskId: task_mqtt_robots_reset
+    - id: button_choose_scab
+      title: Chooses Scab
+      iconName: emoji-frown-fill
+      variant: outline-warning
+      sequenceId: sequence_choose_scab
+    - id: button_reject_union
+      title: Reject Union
+      iconName: hand-thumbs-down-fill
+      variant: outline-warning
+      sequenceId: sequence_union_dies
+    - id: button_destroy_union
+      title: Destroy Union
+      iconName: fire
+      variant: outline-warning
+      sequenceId: sequence_union_dies
+  # States available and which buttons are selectable during each
+  buttonStates:
+    - id: state_choose_side
+      title: Choose Side
+      selectableIds:
+        - button_choose_worker
+        - button_choose_scab
+    - id: state_worker_choices
+      title: Worker Choices
+      selectableIds:
+        - button_help_union
+        - button_reject_union
+        - button_reset
+    - id: state_scab_choices
+      title: Scab Choices
+      selectableIds:
+        - button_join_union
+        - button_destroy_union
+        - button_reset
+    - id: state_end
+      title: Flow End
+      selectableIds:
+        - button_reset
+  # State selection order
+  buttonNextStates:
+    - buttonId: button_choose_worker
+      nextStateId: state_worker_choices
+    - buttonId: button_choose_scab
+      nextStateId: state_scab_choices
+    - buttonId: button_help_union
+      nextStateId: state_end
+    - buttonId: button_reject_union
+      nextStateId: state_end
+    - buttonId: button_join_union
+      nextStateId: state_end
+    - buttonId: button_destroy_union
+      nextStateId: state_end
+    - buttonId: button_reset
+      nextStateId: state_choose_side
+tasks:
+  - taskType: mqtt
+    id: task_mqtt_robots_happy
+    topic: robots/mood
+    command: happy
+  - taskType: mqtt
+    id: task_mqtt_robots_mad
+    topic: robots/mood
+    command: mad
+  - taskType: mqtt
+    id: task_mqtt_robots_drop_signs
+    topic: robots/action
+    command: drop
+  - taskType: mqtt
+    id: task_mqtt_robots_spin
+    topic: robots/action
+    command: spin
+  - taskType: mqtt
+    id: task_mqtt_robots_die
+    topic: robots/action
+    command: die
+  - taskType: mqtt
+    id: task_mqtt_robots_reset
+    topic: robots/action
+    command: reset
+sequences:
+  - id: sequence_choose_workers
+    taskIds:
+      - task_mqtt_robots_happy
+  - id: sequence_choose_scab
+    taskIds:
+      - task_mqtt_robots_mad
+  - id: sequence_help_union
+    taskIds:
+      - task_mqtt_robots_happy
+      - task_mqtt_robots_drop_signs
+  - id: sequence_union_dies
+    taskIds:
+      - task_mqtt_robots_die

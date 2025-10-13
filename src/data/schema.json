@@ -1,0 +1,266 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/ControlPanelContent",
+  "definitions": {
+    "ControlPanelContent": {
+      "type": "object",
+      "properties": {
+        "sequencePanel": {
+          "$ref": "#/definitions/SequencePanelContent"
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ControlTask"
+          }
+        },
+        "sequences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ControlSequence"
+          }
+        }
+      },
+      "required": [
+        "sequencePanel",
+        "tasks",
+        "sequences"
+      ],
+      "additionalProperties": false
+    },
+    "SequencePanelContent": {
+      "type": "object",
+      "properties": {
+        "buttons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TileButtonContent"
+          }
+        },
+        "buttonStates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ButtonState"
+          }
+        },
+        "buttonNextStates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ButtonNextState"
+          }
+        }
+      },
+      "required": [
+        "buttons"
+      ],
+      "additionalProperties": false
+    },
+    "TileButtonContent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "iconName": {
+          "type": "string"
+        },
+        "variant": {
+          "$ref": "#/definitions/ButtonVariant"
+        },
+        "taskId": {
+          "type": "string"
+        },
+        "sequenceId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "iconName",
+        "variant"
+      ],
+      "additionalProperties": false
+    },
+    "ButtonVariant": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Variant"
+        },
+        {
+          "type": "string",
+          "const": "link"
+        },
+        {
+          "type": "string",
+          "const": "outline-primary"
+        },
+        {
+          "type": "string",
+          "const": "outline-secondary"
+        },
+        {
+          "type": "string",
+          "const": "outline-success"
+        },
+        {
+          "type": "string",
+          "const": "outline-danger"
+        },
+        {
+          "type": "string",
+          "const": "outline-warning"
+        },
+        {
+          "type": "string",
+          "const": "outline-info"
+        },
+        {
+          "type": "string",
+          "const": "outline-dark"
+        },
+        {
+          "type": "string",
+          "const": "outline-light"
+        }
+      ]
+    },
+    "Variant": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "string",
+          "enum": [
+            "primary",
+            "secondary",
+            "success",
+            "danger",
+            "warning",
+            "info",
+            "dark",
+            "light"
+          ]
+        }
+      ]
+    },
+    "ButtonState": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "selectableIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "selectableIds"
+      ],
+      "additionalProperties": false
+    },
+    "ButtonNextState": {
+      "type": "object",
+      "properties": {
+        "buttonId": {
+          "type": "string"
+        },
+        "nextStateId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "buttonId",
+        "nextStateId"
+      ],
+      "additionalProperties": false
+    },
+    "ControlTask": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/MQTTCommandTask"
+        },
+        {
+          "$ref": "#/definitions/CommandLineTask"
+        }
+      ]
+    },
+    "MQTTCommandTask": {
+      "type": "object",
+      "properties": {
+        "taskType": {
+          "type": "string",
+          "const": "mqtt"
+        },
+        "id": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string"
+        },
+        "command": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "taskType",
+        "id",
+        "topic",
+        "command"
+      ],
+      "additionalProperties": false
+    },
+    "CommandLineTask": {
+      "type": "object",
+      "properties": {
+        "taskType": {
+          "type": "string",
+          "const": "commandLine"
+        },
+        "id": {
+          "type": "string"
+        },
+        "command": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "taskType",
+        "id",
+        "command"
+      ],
+      "additionalProperties": false
+    },
+    "ControlSequence": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "taskIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "taskIds"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
