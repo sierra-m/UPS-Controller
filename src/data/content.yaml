@@ -73,15 +73,57 @@ sequencePanel:
       nextStateId: state_end
     - buttonId: button_reset
       nextStateId: state_choose_side
+robotsPanel:
+  buttons:
+    - id: button_robots_happy
+      title: Happy
+      iconName: emoji-smile-fill
+      variant: outline-success
+      taskId: task_mqtt_robots_happy
+    - id: button_robots_angry
+      title: Angry
+      iconName: emoji-angry-fill
+      variant: outline-danger
+      taskId: task_mqtt_robots_angry
+    - id: button_robots_march
+      title: March
+      iconName: person-walking
+      variant: outline-primary
+      taskId: task_mqtt_robots_march
+    - id: button_robots_halt
+      title: Halt
+      iconName: sign-stop-fill
+      variant: outline-primary
+      taskId: task_mqtt_robots_halt
+    - id: button_robots_drop_signs
+      title: Drop Signs
+      iconName: person-arms-up
+      variant: outline-primary
+      taskId: task_mqtt_robots_drop_signs
+    - id: button_robots_spin
+      title: Spin
+      iconName: arrow-clockwise
+      variant: outline-primary
+      taskId: task_mqtt_robots_spin
+    - id: button_robots_die
+      title: Die
+      iconName: emoji-dizzy-fill
+      variant: outline-danger
+      taskId: task_mqtt_robots_die
+    - id: button_robots_reset
+      title: Reset
+      iconName: emoji-dizzy-fill
+      variant: outline-danger
+      taskId: task_mqtt_robots_reset
 tasks:
   - taskType: mqtt
     id: task_mqtt_robots_happy
     topic: robots/mood
     command: happy
   - taskType: mqtt
-    id: task_mqtt_robots_mad
+    id: task_mqtt_robots_angry
     topic: robots/mood
-    command: mad
+    command: angry
   - taskType: mqtt
     id: task_mqtt_robots_drop_signs
     topic: robots/action
@@ -98,13 +140,21 @@ tasks:
     id: task_mqtt_robots_reset
     topic: robots/action
     command: reset
+  - taskType: mqtt
+    id: task_mqtt_robots_march
+    topic: robots/action
+    command: march
+  - taskType: mqtt
+    id: task_mqtt_robots_halt
+    topic: robots/action
+    command: halt
 sequences:
   - id: sequence_choose_workers
     taskIds:
       - task_mqtt_robots_happy
   - id: sequence_choose_scab
     taskIds:
-      - task_mqtt_robots_mad
+      - task_mqtt_robots_angry
   - id: sequence_help_union
     taskIds:
       - task_mqtt_robots_happy
