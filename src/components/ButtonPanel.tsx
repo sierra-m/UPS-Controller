@@ -22,7 +22,7 @@ const TileButton = (props: TileButtonProps) => {
       <Button
         variant={props.variant}
         size={'lg'}
-        className={'w-100 mb-4'}
+        className={'w-100'}
         style={{aspectRatio: '1 / 1'}}
         onClick={props.callback}
         disabled={props.disabled}
@@ -44,7 +44,7 @@ const ButtonPanel = (props: ButtonPanelProps) => {
   return (
     <Row className={'mt-3'}>
       <Col xs={9} sm={9} md={9} lg={9} xl={9}>
-        <Row>
+        <Row className={'row-gap-4'}>
           {props.buttonPropsArray.map((item: TileButtonProps, index: number) => (
             <TileButton
               {...item}
@@ -54,7 +54,7 @@ const ButtonPanel = (props: ButtonPanelProps) => {
         </Row>
       </Col>
       <Col>
-        <Card className={'h-100'} border={'primary'}>
+        <Card className={'h-100'} border={'info'}>
           <Card.Body>
             <Card.Title>Status</Card.Title>
             <Card.Text>

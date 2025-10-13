@@ -6,7 +6,7 @@ import upsLogo from '../images/ups_logo.png';
 
 const Navigation = () => {
   return (
-    <Navbar className="bg-primary" data-bs-theme="dark">
+    <Navbar className="bg-info" data-bs-theme="dark">
       <Container>
         <Navbar.Brand href="/">
           <img
