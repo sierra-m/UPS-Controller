@@ -5,13 +5,16 @@ import mqtt from 'mqtt';
 import index from "./index.html";
 import content, {taskIds, sequenceIds} from '@/utils/content.ts';
 import type {ActionRequest} from "@/types/api.ts";
-import {mqttHost, mqttPort} from "@/config.ts";
+import {mqttHost, mqttPort, mqttUsername, mqttPassword} from "@/config.ts";
 
 
 console.log(`Connecting to MQTT broker ${mqttHost}:${mqttPort}...`);
 const mqttClient = mqtt.connect({
   host: mqttHost,
-  port: mqttPort
+  port: mqttPort,
+  username: mqttUsername,
+  password: mqttPassword,
+  clientId: "ups-controller"
 });
 console.log('Connected to broker.')
 
@@ -119,6 +122,8 @@ const server = serve({
     // Echo console logs from the browser to the server
     console: true,
   },
+  port: 80,
+  hostname: "0.0.0.0"
 });
 
 console.log(`🚀 Server running at ${server.url}`);
