@@ -226,6 +226,9 @@
         "id": {
           "type": "string"
         },
+        "title": {
+          "type": "string"
+        },
         "topic": {
           "type": "string"
         },
@@ -249,6 +252,9 @@
           "const": "commandLine"
         },
         "id": {
+          "type": "string"
+        },
+        "title": {
           "type": "string"
         },
         "command": {

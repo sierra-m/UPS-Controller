@@ -14,6 +14,7 @@ export interface ButtonNextState {
 export interface MQTTCommandTask {
   taskType: 'mqtt';
   id: string;
+  title?: string;
   topic: string;
   command: string;
 }
@@ -21,6 +22,7 @@ export interface MQTTCommandTask {
 export interface CommandLineTask {
   taskType: 'commandLine';
   id: string;
+  title?: string;
   command: string;
 }
 
