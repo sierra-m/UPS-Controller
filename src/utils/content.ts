@@ -1,5 +1,5 @@
 import {Ajv} from "ajv";
-import {type ControlPanelContent} from "@/data/schema.ts";
+import {type ControlPanelContent, type ControlSequence, type ControlTask} from "@/data/schema.ts";
 import schema from "@/data/schema.json";
 import content from '@/data/content.yaml';
 
@@ -30,6 +30,8 @@ export const taskIds = content.tasks.map((task) => task.id);
 assert(isUnique<string>(taskIds), "Task IDs must be unique.");
 assert(taskIds.every((id) => id.startsWith('task_')), "Task IDs must be prefixed with 'task_'");
 
+export const tasksMap = new Map<string, ControlTask>(content.tasks.map((task) => [task.id, task]));
+
 export const sequenceIds = content.sequences.map((sequence) => sequence.id);
 
 assert(isUnique<string>(sequenceIds), "Sequence IDs must be unique.");
@@ -37,6 +39,8 @@ assert(
   sequenceIds.every((id) => id.startsWith('sequence_')),
   "Sequence IDs must be prefixed with 'sequence_'"
 );
+
+export const sequencesMap = new Map<string, ControlSequence>(content.sequences.map((sequence) => [sequence.id, sequence]));
 
 for (const sequence of content.sequences) {
   for (const taskId of sequence.taskIds) {

@@ -43,7 +43,7 @@ interface ButtonPanelProps {
 const ButtonPanel = (props: ButtonPanelProps) => {
   return (
     <Row className={'mt-3 flex-nowrap'}>
-      <Col xs={9} sm={9} md={9} lg={9} xl={9}>
+      <Col xs={8} sm={8} md={8} lg={8} xl={8}>
         <Row className={'row-gap-4'}>
           {props.buttonPropsArray.map((item: TileButtonProps, index: number) => (
             <TileButton
@@ -56,10 +56,10 @@ const ButtonPanel = (props: ButtonPanelProps) => {
       <Col>
         <Card className={'h-100'} border={'info'}>
           <Card.Body style={{ overflowX: 'auto' }}>
-            <Card.Title>Status</Card.Title>
-            <Card.Text>
+            <Card.Title><h4>Status</h4></Card.Title>
+            <div className={'card-text'}>
               {props.children}
-            </Card.Text>
+            </div>
           </Card.Body>
         </Card>
       </Col>
