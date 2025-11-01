@@ -274,6 +274,9 @@
         "id": {
           "type": "string"
         },
+        "title": {
+          "type": "string"
+        },
         "taskIds": {
           "type": "array",
           "items": {

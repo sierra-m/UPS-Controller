@@ -30,6 +30,7 @@ export type ControlTask = MQTTCommandTask | CommandLineTask;
 
 export interface ControlSequence {
   id: string;
+  title?: string;
   taskIds: string[];
 }
 
