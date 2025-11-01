@@ -1,21 +1,24 @@
-import {memo, useEffect, useState} from "react";
+import {memo, useEffect, useRef, useState} from "react";
 import Badge from 'react-bootstrap/Badge';
 
 import ButtonPanel from "@/components/ButtonPanel.tsx";
 import type {TileButtonProps} from "@/components/ButtonPanel.tsx";
 
-import content from '@/utils/content.ts';
+import content, {tasksMap, sequencesMap} from '@/utils/content.ts';
 import {firstLetterCaps} from '@/utils/utils.ts';
 import type {ButtonNextState, ButtonState, TileButtonContent} from "@/data/schema.ts";
 import type {Variant} from "react-bootstrap/types";
 import type {ActionRequest, ActionRequestKind} from "@/types/api.ts";
 import {runAction} from "@/utils/utils.ts";
+import Alert from "react-bootstrap/Alert";
+import Spinner from "react-bootstrap/Spinner";
 
 
 interface ButtonAction {
   kind: ActionRequestKind;
   badgeColor: Variant;
   actionId: string;
+  actionTitle: string;
 }
 
 const useButtonStates = !!(content.sequencePanel.buttonStates && content.sequencePanel.buttonNextStates);
@@ -39,23 +42,41 @@ const Sequences = () => {
     useButtonStates ? content.sequencePanel.buttonStates![0]!.id : ''
   );
 
+  // Whether spinner is showing
+  const [showLoading, setShowLoading] = useState<boolean>(false);
+
+  const spinnerTimerRef = useRef<NodeJS.Timeout>(null);
+
   const selectButton = async (buttonContent: TileButtonContent) => {
     if (buttonContent.taskId) {
+      const task = tasksMap.get(buttonContent.taskId)!;
       setSelectedAction({
         kind: 'task',
         badgeColor: buttonContent.variant.replace('outline-', ''),
-        actionId: buttonContent.taskId
+        actionId: buttonContent.taskId,
+        actionTitle: (task.title ? task.title : task.id)
       });
+      setShowLoading(true);
       await runAction('task', buttonContent.taskId);
     } else if (buttonContent.sequenceId) {
+      const sequence = sequencesMap.get(buttonContent.sequenceId)!;
       setSelectedAction({
         kind: 'sequence',
         badgeColor: buttonContent.variant.replace('outline-', ''),
-        actionId: buttonContent.sequenceId
+        actionId: buttonContent.sequenceId,
+        actionTitle: (sequence.title ? sequence.title : sequence.id)
       });
+      setShowLoading(true);
       await runAction('sequence', buttonContent.sequenceId);
     }
     setActiveButtonState(buttonNextStatesMap.get(buttonContent.id)!);
+
+    if (spinnerTimerRef.current) {
+      clearTimeout(spinnerTimerRef.current);
+    }
+    spinnerTimerRef.current = setTimeout(() => {
+      setShowLoading(false);
+    }, 500);
   };
 
   const buttonData: TileButtonProps[] = content.sequencePanel.buttons.map((buttonContent: TileButtonContent) => ({
@@ -69,11 +90,24 @@ const Sequences = () => {
   return (
     <ButtonPanel buttonPropsArray={buttonData}>
       {useButtonStates && <>
-        <strong>Selection State: </strong> <br/>
-        <Badge bg={'primary'}>{buttonStatesMap.get(activeButtonState)!.title}</Badge> <br/>
+        <h5>
+          <Badge bg={'primary'} className={'me-2'}>STATE</Badge>
+        </h5>
+        <Alert variant={'light'}>
+          {buttonStatesMap.get(activeButtonState)!.title}
+        </Alert>
       </>}
-      <strong>Action: </strong>{selectedAction && firstLetterCaps(selectedAction.kind)} <br/>
-      {selectedAction && <Badge bg={selectedAction.badgeColor}>{selectedAction.actionId}</Badge>}
+      {selectedAction && <>
+        <h5>
+          <Badge bg={selectedAction.badgeColor} className={'me-2'}>{selectedAction.kind.toUpperCase()}</Badge>
+          {showLoading ?
+            <Spinner animation={'border'} size={'sm'} variant={'info'}/> :
+            <i className="bi bi-check-lg" style={{color: '#00ae10'}}></i>}
+        </h5>
+        <Alert variant={'light'}>
+          {selectedAction.actionTitle}
+        </Alert>
+      </>}
     </ButtonPanel>
   );
 }
