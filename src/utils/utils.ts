@@ -22,9 +22,13 @@ export const runAction = async (kind: ActionRequestKind, id: string) => {
     }
     const data = await response.json();
     if ('message' in data) {
-      console.log(` [API] ${data.message()}`);
+      console.log(` [API] ${data.message}`);
     }
   } catch (error) {
     console.error(error);
   }
+};
+
+export const delay = (milliseconds: number) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds));
 };

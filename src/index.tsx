@@ -1,11 +1,12 @@
 import { serve } from "bun";
 import Ajv, {type JSONSchemaType} from "ajv";
 import mqtt from 'mqtt';
+import {setTimeout} from 'node:timers/promises';
 
 import index from "./index.html";
 import content, {taskIds, sequenceIds} from '@/utils/content.ts';
-import type {ActionRequest} from "@/types/api.ts";
-import {mqttHost, mqttPort, mqttUsername, mqttPassword} from "@/config.ts";
+import type {ActionRequest, NamesResponse} from "@/types/api.ts";
+import {mqttHost, mqttPort, mqttUsername, mqttPassword, mqttRequestTimeout} from "@/config.ts";
 
 
 console.log(`Connecting to MQTT broker ${mqttHost}:${mqttPort}...`);
@@ -16,7 +17,23 @@ const mqttClient = mqtt.connect({
   password: mqttPassword,
   clientId: "ups-controller"
 });
-console.log('Connected to broker.')
+
+let connectedMqttNames: string[] = [];
+
+mqttClient.on('connect', () => {
+  console.log('Connected to broker.');
+  mqttClient.subscribe('robots/rsp');
+});
+
+mqttClient.on('message', (topic, payload) => {
+  if (topic === 'robots/rsp') {
+    const message = payload.toString();
+    const found = message.match(/name=(\w+)/);
+    if (found && found.length > 1 && found[1]) {
+      connectedMqttNames.push(found[1]);
+    }
+  }
+});
 
 const actionRequestSchema: JSONSchemaType<ActionRequest> = {
   type: 'object',
@@ -106,12 +123,14 @@ const server = serve({
         });
       },
     },
-
-    "/api/hello/:name": async req => {
-      const name = req.params.name;
-      return Response.json({
-        message: `Hello, ${name}!`,
-      });
+    '/api/names': async req => {
+      connectedMqttNames = [];
+      mqttClient.publish('robots/req', 'name');
+      await setTimeout(mqttRequestTimeout);
+      const resp: NamesResponse = {
+        names: connectedMqttNames
+      };
+      return Response.json(resp);
     },
   },
 
