@@ -95,6 +95,11 @@ robotsPanel:
       iconName: sign-stop-fill
       variant: outline-primary
       taskId: task_mqtt_robots_halt
+    - id: button_robots_wave_signs
+      title: Wave Signs
+      iconName: flag-fill
+      variant: outline-primary
+      taskId: task_mqtt_robots_wave_signs
     - id: button_robots_drop_signs
       title: Drop Signs
       iconName: person-arms-up
@@ -105,6 +110,11 @@ robotsPanel:
       iconName: arrow-clockwise
       variant: outline-primary
       taskId: task_mqtt_robots_spin
+    - id: button_robots_step
+      title: Step
+      iconName: arrow-right-square
+      variant: outline-primary
+      taskId: task_mqtt_robots_step
     - id: button_robots_die
       title: Die
       iconName: emoji-dizzy-fill
@@ -118,47 +128,69 @@ robotsPanel:
 tasks:
   - taskType: mqtt
     id: task_mqtt_robots_happy
+    title: "Robots: Happy 😊"
     topic: robots/mood
     command: happy
   - taskType: mqtt
     id: task_mqtt_robots_angry
+    title: "Robots: Angry 😠"
     topic: robots/mood
     command: angry
   - taskType: mqtt
     id: task_mqtt_robots_drop_signs
+    title: "Robots: Drop Signs ⬇️"
     topic: robots/action
     command: drop
   - taskType: mqtt
     id: task_mqtt_robots_spin
+    title: "Robots: Do A Spin! 🔄️"
     topic: robots/action
     command: spin
   - taskType: mqtt
     id: task_mqtt_robots_die
+    title: "Robots: Die 😵"
     topic: robots/action
     command: die
   - taskType: mqtt
     id: task_mqtt_robots_reset
+    title: "Robots: Reset ❌"
     topic: robots/action
     command: reset
   - taskType: mqtt
     id: task_mqtt_robots_march
+    title: "Robots: March 🚶‍♂️‍➡️"
     topic: robots/action
     command: march
   - taskType: mqtt
     id: task_mqtt_robots_halt
+    title: "Robots: Halt 🛑"
     topic: robots/action
     command: halt
+  - taskType: mqtt
+    id: task_mqtt_robots_wave_signs
+    title: "Robots: Wave Signs 🪧"
+    topic: robots/action
+    command: wave
+  - taskType: mqtt
+    id: task_mqtt_robots_step
+    title: "Robots: Step 🐾"
+    topic: robots/action
+    command: step
 sequences:
   - id: sequence_choose_workers
+    title: "Choose Workers 👷‍♀️"
     taskIds:
       - task_mqtt_robots_happy
   - id: sequence_choose_scab
+    title: "Choose Scab 💰"
     taskIds:
       - task_mqtt_robots_angry
   - id: sequence_help_union
+    title: "Help Union 💪"
     taskIds:
       - task_mqtt_robots_happy
       - task_mqtt_robots_drop_signs
   - id: sequence_union_dies
+    title: "Union Dies 😵"
     taskIds:
       - task_mqtt_robots_die
