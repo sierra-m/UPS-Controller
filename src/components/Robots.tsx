@@ -12,6 +12,12 @@ import Button from "react-bootstrap/Button";
 import type {NamesResponse} from "@/types/api.ts";
 
 import '@/styles/robots.css';
+import {Form} from "react-bootstrap";
+
+interface ConnectedBot {
+  name: string;
+  controlling: boolean;
+}
 
 
 const Robots = () => {
@@ -21,17 +27,30 @@ const Robots = () => {
   // Whether spinner is showing
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
-  const [connectedNames, setConnectedNames] = useState<string[]>([]);
+  const [connectedBots, setConnectedBots] = useState<ConnectedBot[]>([]);
 
   const [refreshButtonIsRotated, setRefreshButtonIsRotated] = useState<boolean>(false);
+
+  const [buttonsDisabled, setButtonsDisabled] = useState<boolean>(false);
 
   const spinnerTimerRef = useRef<NodeJS.Timeout>(null);
 
   const selectButton = async (buttonContent: TileButtonContent) => {
     if (buttonContent.taskId) {
+      const selectedBots = connectedBots.filter(bot => bot.controlling);
+      if (selectedBots.length === 0) {
+        // Any button press is invalid if no bots are selected for control
+        return;
+      }
+      const selectedClientIds = (
+        (selectedBots.length < connectedBots.length) ?
+          selectedBots.map(bot => `kin-${bot.name}`) :
+          []
+      );
+
       const task = tasksMap.get(buttonContent.taskId)!;
       setSelectedTask(task);
-      await runAction('task', buttonContent.taskId);
+      await runAction('task', buttonContent.taskId, selectedClientIds);
     }
     setShowLoading(true);
     if (spinnerTimerRef.current) {
@@ -50,7 +69,7 @@ const Robots = () => {
     }
   }, []);
 
-  const getConnectedNames = useCallback(async () => {
+  const getConnectedBots = useCallback(async () => {
     setRefreshButtonIsRotated(!refreshButtonIsRotated);
     try {
       const response = await fetch('/api/names');
@@ -60,7 +79,7 @@ const Robots = () => {
       }
       const data: NamesResponse = await response.json();
       if ('names' in data) {
-        setConnectedNames(data.names);
+        setConnectedBots(data.names.map(name => ({name: name, controlling: true})));
       }
     } catch (error) {
       console.error(error);
@@ -82,8 +101,22 @@ const Robots = () => {
     iconName: buttonContent.iconName,
     variant: buttonContent.variant,
     callback: () => selectButton(buttonContent),
-    disabled: false
+    disabled: buttonsDisabled
   }));
+
+  const handleBotsSwitchChange = useCallback((name: string) => {
+    setConnectedBots(connectedBots.map(bot => {
+      if (bot.name == name) {
+        return {name: bot.name, controlling: !bot.controlling};
+      } else {
+        return bot;
+      }
+    }));
+  }, [connectedBots]);
+
+  useEffect(() => {
+    setButtonsDisabled(!connectedBots.some(bot => bot.controlling));
+  }, [connectedBots]);
 
   return (
     <ButtonPanel buttonPropsArray={buttonData}>
@@ -101,17 +134,30 @@ const Robots = () => {
       <hr/>
       <h5>
         Connected
-        <Button className={'ms-2'} size={'sm'} onClick={getConnectedNames}>
+        <Button className={'ms-2'} size={'sm'} onClick={getConnectedBots}>
           <i className={"bi bi-arrow-clockwise " + (refreshButtonIsRotated ? 'rotate-icon' : '')}></i>
         </Button>
       </h5>
       <Table borderless>
         <tbody>
-        {connectedNames.map((name, index) => (
+        {connectedBots.map((connectedBot, index) => (
           <tr key={index}>
-            <td>kin-{name}</td>
-            <td>
-              <i className={"bi bi-check-lg "} style={{color: '#00ae10'}}></i>
+            <td className={'col-8'}>kin-{connectedBot.name}</td>
+            <td className={'col-2'}>
+              <Form>
+                <Form.Check
+                  type="switch"
+                  id="custom-switch" // Unique ID for the switch
+                  label=""
+                  checked={connectedBot.controlling} // Controlled by the state
+                  onChange={() => handleBotsSwitchChange(connectedBot.name)} // Handles state updates
+                />
+              </Form>
+            </td>
+            <td className={'col-2'}>
+              {connectedBot.controlling ?
+                <i className={"bi bi-check-square-fill "} style={{color: '#00ae10'}}></i> :
+                <i className={"bi bi-slash-square-fill"} style={{color: '#ffa600'}}></i>}
             </td>
           </tr>
         ))}

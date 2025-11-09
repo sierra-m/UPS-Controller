@@ -42,7 +42,14 @@ const actionRequestSchema: JSONSchemaType<ActionRequest> = {
       type: 'string',
       enum: ['task', 'sequence']
     },
-    id: {type: 'string'}
+    id: {type: 'string'},
+    clientIds: {
+      type: "array",
+      items: {
+        type: "string"
+      },
+      nullable: true
+    }
   },
   required: ['kind', 'id'],
   additionalProperties: false
@@ -52,12 +59,20 @@ const ajv = new Ajv();
 
 const validateActionRequest = ajv.compile(actionRequestSchema);
 
-const runTask = async (id: string) => {
+const runTask = async (id: string, clientIds: string[] = []) => {
   const foundTask = content.tasks.find(task => task.id === id);
   if (foundTask) {
     if (foundTask.taskType === 'mqtt') {
-      console.log(` [TASK] (MQTT) ${foundTask.id}: Publishing command '${foundTask.command}' to topic '${foundTask.topic}'`);
-      mqttClient.publish(foundTask.topic, foundTask.command);
+      if (clientIds.length > 0 && foundTask.clientTopic != null) {
+        const topicNames = clientIds.map(name => foundTask.clientTopic!.replace('{id}', name));
+        console.log(` [TASK] (MQTT) ${foundTask.id}: Publishing command '${foundTask.command}' to topics [${topicNames.join(', ')}]`);
+        for (const topicName of topicNames) {
+          mqttClient.publish(topicName, foundTask.command);
+        }
+      } else {
+        console.log(` [TASK] (MQTT) ${foundTask.id}: Publishing command '${foundTask.command}' to topic '${foundTask.topic}'`);
+        mqttClient.publish(foundTask.topic, foundTask.command);
+      }
     } else if (foundTask.taskType === 'commandLine') {
       console.log(` [TASK] (CLI) ${foundTask.id}: Executing command '${foundTask.command}'`);
     }
@@ -80,7 +95,7 @@ const runSequence = async (id: string) => {
 
 const runAction = async (actionRequest: ActionRequest) => {
   if (actionRequest.kind === 'task') {
-    await runTask(actionRequest.id);
+    await runTask(actionRequest.id, actionRequest.clientIds ? actionRequest.clientIds : []);
   } else if (actionRequest.kind === 'sequence') {
     await runSequence(actionRequest.id);
   }
