@@ -232,6 +232,9 @@
         "topic": {
           "type": "string"
         },
+        "clientTopic": {
+          "type": "string"
+        },
         "command": {
           "type": "string"
         }

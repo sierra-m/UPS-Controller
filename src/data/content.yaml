@@ -130,51 +130,61 @@ tasks:
     id: task_mqtt_robots_happy
     title: "Robots: Happy 😊"
     topic: robots/mood
+    clientTopic: robots/{id}/mood
     command: happy
   - taskType: mqtt
     id: task_mqtt_robots_angry
     title: "Robots: Angry 😠"
     topic: robots/mood
+    clientTopic: robots/{id}/mood
     command: angry
   - taskType: mqtt
     id: task_mqtt_robots_drop_signs
     title: "Robots: Drop Signs ⬇️"
     topic: robots/action
+    clientTopic: robots/{id}/action
     command: drop
   - taskType: mqtt
     id: task_mqtt_robots_spin
     title: "Robots: Do A Spin! 🔄️"
     topic: robots/action
+    clientTopic: robots/{id}/action
     command: spin
   - taskType: mqtt
     id: task_mqtt_robots_die
     title: "Robots: Die 😵"
     topic: robots/action
+    clientTopic: robots/{id}/action
     command: die
   - taskType: mqtt
     id: task_mqtt_robots_reset
     title: "Robots: Reset ❌"
     topic: robots/action
+    clientTopic: robots/{id}/action
     command: reset
   - taskType: mqtt
     id: task_mqtt_robots_march
     title: "Robots: March 🚶‍♂️‍➡️"
     topic: robots/action
+    clientTopic: robots/{id}/action
     command: march
   - taskType: mqtt
     id: task_mqtt_robots_halt
     title: "Robots: Halt 🛑"
     topic: robots/action
+    clientTopic: robots/{id}/action
     command: halt
   - taskType: mqtt
     id: task_mqtt_robots_wave_signs
     title: "Robots: Wave Signs 🪧"
     topic: robots/action
+    clientTopic: robots/{id}/action
     command: wave
   - taskType: mqtt
     id: task_mqtt_robots_step
     title: "Robots: Step 🐾"
     topic: robots/action
+    clientTopic: robots/{id}/action
     command: step
 sequences:
   - id: sequence_choose_workers

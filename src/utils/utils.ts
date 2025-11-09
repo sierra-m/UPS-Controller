@@ -1,4 +1,4 @@
-import type {ActionRequestKind} from "@/types/api.ts";
+import type {ActionRequestKind, ActionRequest} from "@/types/api.ts";
 
 export const firstLetterCaps = (text: string) => {
   if (text && (text.length > 1)) {
@@ -7,14 +7,21 @@ export const firstLetterCaps = (text: string) => {
   return '';
 };
 
-export const runAction = async (kind: ActionRequestKind, id: string) => {
+export const runAction = async (kind: ActionRequestKind, id: string, clientIds: string[] = []) => {
   try {
+    const req: ActionRequest = {
+      kind: kind,
+      id: id
+    };
+    if (clientIds.length > 0) {
+      req.clientIds = clientIds;
+    }
     const response = await fetch('/api/action', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({kind, id})
+      body: JSON.stringify(req)
     });
     if (!response.ok) {
       console.error(`API error running action ${id}: ${response}`);

@@ -16,6 +16,7 @@ export interface MQTTCommandTask {
   id: string;
   title?: string;
   topic: string;
+  clientTopic?: string;
   command: string;
 }
 
