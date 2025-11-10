@@ -2,11 +2,24 @@ import { serve } from "bun";
 import Ajv, {type JSONSchemaType} from "ajv";
 import mqtt from 'mqtt';
 import {setTimeout} from 'node:timers/promises';
+import { Client as OscClient } from 'node-osc';
+import pc from 'picocolors';
 
 import index from "./index.html";
 import content, {taskIds, sequenceIds} from '@/utils/content.ts';
 import type {ActionRequest, NamesResponse} from "@/types/api.ts";
-import {mqttHost, mqttPort, mqttUsername, mqttPassword, mqttRequestTimeout, bunServePort} from "@/config.ts";
+import {
+  mqttHost,
+  mqttPort,
+  mqttUsername,
+  mqttPassword,
+  mqttRequestTimeout,
+  bunServePort,
+  useOscClient,
+  oscHost,
+  oscPort
+} from "@/config.ts";
+import type {TaskType} from "@/data/schema.ts";
 
 
 console.log(`Connecting to MQTT broker ${mqttHost}:${mqttPort}...`);
@@ -35,6 +48,11 @@ mqttClient.on('message', (topic, payload) => {
   }
 });
 
+let oscClient: OscClient;
+if (useOscClient) {
+  oscClient = new OscClient(oscHost, oscPort);
+}
+
 const actionRequestSchema: JSONSchemaType<ActionRequest> = {
   type: 'object',
   properties: {
@@ -59,22 +77,40 @@ const ajv = new Ajv();
 
 const validateActionRequest = ajv.compile(actionRequestSchema);
 
+const logTask = (taskType: TaskType, taskId: string, message: string) => {
+  const taskStr = (taskType === 'commandLine') ? 'CLI' : taskType.toUpperCase();
+  console.log(` [${pc.blue('TASK')}] (${pc.yellow(taskStr)}) ${taskId}: ${message}`);
+}
+
 const runTask = async (id: string, clientIds: string[] = []) => {
   const foundTask = content.tasks.find(task => task.id === id);
   if (foundTask) {
     if (foundTask.taskType === 'mqtt') {
       if (clientIds.length > 0 && foundTask.clientTopic != null) {
         const topicNames = clientIds.map(name => foundTask.clientTopic!.replace('{id}', name));
-        console.log(` [TASK] (MQTT) ${foundTask.id}: Publishing command '${foundTask.command}' to topics [${topicNames.join(', ')}]`);
+        logTask('mqtt', foundTask.id, `Publishing command '${foundTask.command}' to topics [${topicNames.join(', ')}]`);
         for (const topicName of topicNames) {
           mqttClient.publish(topicName, foundTask.command);
         }
       } else {
-        console.log(` [TASK] (MQTT) ${foundTask.id}: Publishing command '${foundTask.command}' to topic '${foundTask.topic}'`);
+        logTask('mqtt', foundTask.id, `Publishing command '${foundTask.command}' to topic '${foundTask.topic}'`)
         mqttClient.publish(foundTask.topic, foundTask.command);
       }
     } else if (foundTask.taskType === 'commandLine') {
-      console.log(` [TASK] (CLI) ${foundTask.id}: Executing command '${foundTask.command}'`);
+      logTask('commandLine', foundTask.id, `Executing command '${foundTask.command}'`);
+    } else if (foundTask.taskType === 'osc') {
+      logTask('osc', foundTask.id, `Sending value '${foundTask.value}' to address '${foundTask.address}'`)
+      if (useOscClient && oscClient) {
+        oscClient.send(foundTask.address, foundTask.value, (err: Error | null) => {
+          if (err) {
+            console.error(`OSC message failed to send: ${err}`);
+          } else {
+            console.log(`OSC: Sent value '${foundTask.value}' to address '${foundTask.address}'`)
+          }
+        });
+      } else {
+        console.error('OSC not enabled');
+      }
     }
   } else {
     throw new RangeError(`Invalid task id '${id}'`);

@@ -4,3 +4,6 @@ export const mqttUsername = process.env.MQTT_USERNAME || '';
 export const mqttPassword = process.env.MQTT_PASSWORD || '';
 export const mqttRequestTimeout = 5000;
 export const bunServePort = process.env.BUN_SERVE_PORT || 80;
+export const useOscClient = process.env.USE_OSC_CLIENT ? process.env.USE_OSC_CLIENT === 'true' : false;
+export const oscHost = process.env.OSC_HOST || 'localhost';
+export const oscPort = process.env.OSC_PORT ? parseInt(process.env.OSC_PORT) : 3333;
