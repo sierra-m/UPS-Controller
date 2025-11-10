@@ -11,6 +11,12 @@
         "robotsPanel": {
           "$ref": "#/definitions/RobotsPanelContent"
         },
+        "musicPanel": {
+          "$ref": "#/definitions/MusicPanelContent"
+        },
+        "lightingPanel": {
+          "$ref": "#/definitions/LightingPanelContent"
+        },
         "tasks": {
           "type": "array",
           "items": {
@@ -27,6 +33,8 @@
       "required": [
         "sequencePanel",
         "robotsPanel",
+        "musicPanel",
+        "lightingPanel",
         "tasks",
         "sequences"
       ],
@@ -206,6 +214,36 @@
       ],
       "additionalProperties": false
     },
+    "MusicPanelContent": {
+      "type": "object",
+      "properties": {
+        "buttons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TileButtonContent"
+          }
+        }
+      },
+      "required": [
+        "buttons"
+      ],
+      "additionalProperties": false
+    },
+    "LightingPanelContent": {
+      "type": "object",
+      "properties": {
+        "buttons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TileButtonContent"
+          }
+        }
+      },
+      "required": [
+        "buttons"
+      ],
+      "additionalProperties": false
+    },
     "ControlTask": {
       "anyOf": [
         {
@@ -213,6 +251,9 @@
         },
         {
           "$ref": "#/definitions/CommandLineTask"
+        },
+        {
+          "$ref": "#/definitions/OSCTask"
         }
       ]
     },
@@ -271,6 +312,34 @@
       ],
       "additionalProperties": false
     },
+    "OSCTask": {
+      "type": "object",
+      "properties": {
+        "taskType": {
+          "type": "string",
+          "const": "osc"
+        },
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "taskType",
+        "id",
+        "address",
+        "value"
+      ],
+      "additionalProperties": false
+    },
     "ControlSequence": {
       "type": "object",
       "properties": {
@@ -281,6 +350,12 @@
           "type": "string"
         },
         "taskIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mqttClients": {
           "type": "array",
           "items": {
             "type": "string"

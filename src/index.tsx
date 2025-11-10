@@ -86,7 +86,8 @@ const runSequence = async (id: string) => {
   if (foundSequence) {
     console.log(` [SEQ]  Running ${foundSequence.id}`);
     for (const taskId of foundSequence.taskIds) {
-      await runTask(taskId);
+      const clientIds = foundSequence.mqttClients != null ? foundSequence.mqttClients : [];
+      await runTask(taskId, clientIds);
     }
   } else {
     throw new RangeError(`Invalid sequence id '${id}'`);

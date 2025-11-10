@@ -11,6 +11,8 @@ export interface ButtonNextState {
   nextStateId: string;
 }
 
+export type TaskType = 'mqtt' | 'commandLine' | 'osc';
+
 export interface MQTTCommandTask {
   taskType: 'mqtt';
   id: string;
@@ -27,12 +29,21 @@ export interface CommandLineTask {
   command: string;
 }
 
-export type ControlTask = MQTTCommandTask | CommandLineTask;
+export interface OSCTask {
+  taskType: 'osc';
+  id: string;
+  title?: string;
+  address: string;
+  value: number;
+}
+
+export type ControlTask = MQTTCommandTask | CommandLineTask | OSCTask;
 
 export interface ControlSequence {
   id: string;
   title?: string;
   taskIds: string[];
+  mqttClients?: string[];
 }
 
 export interface TileButtonContent {
@@ -54,9 +65,19 @@ export interface RobotsPanelContent {
   buttons: TileButtonContent[];
 }
 
+export interface MusicPanelContent {
+  buttons: TileButtonContent[];
+}
+
+export interface LightingPanelContent {
+  buttons: TileButtonContent[];
+}
+
 export interface ControlPanelContent {
   sequencePanel: SequencePanelContent;
   robotsPanel: RobotsPanelContent;
+  musicPanel: MusicPanelContent;
+  lightingPanel: LightingPanelContent;
   tasks: ControlTask[];
   sequences: ControlSequence[];
 }
