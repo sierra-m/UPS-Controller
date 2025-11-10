@@ -120,7 +120,7 @@ const runTask = async (id: string, clientIds: string[] = []) => {
 const runSequence = async (id: string) => {
   const foundSequence = content.sequences.find(sequence => sequence.id === id);
   if (foundSequence) {
-    console.log(` [SEQ]  Running ${foundSequence.id}`);
+    console.log(` [${pc.magenta('SEQ')}]  Running ${foundSequence.id}`);
     for (const taskId of foundSequence.taskIds) {
       const clientIds = foundSequence.mqttClients != null ? foundSequence.mqttClients : [];
       await runTask(taskId, clientIds);
