@@ -6,7 +6,7 @@ import {setTimeout} from 'node:timers/promises';
 import index from "./index.html";
 import content, {taskIds, sequenceIds} from '@/utils/content.ts';
 import type {ActionRequest, NamesResponse} from "@/types/api.ts";
-import {mqttHost, mqttPort, mqttUsername, mqttPassword, mqttRequestTimeout} from "@/config.ts";
+import {mqttHost, mqttPort, mqttUsername, mqttPassword, mqttRequestTimeout, bunServePort} from "@/config.ts";
 
 
 console.log(`Connecting to MQTT broker ${mqttHost}:${mqttPort}...`);
@@ -156,7 +156,7 @@ const server = serve({
     // Echo console logs from the browser to the server
     console: true,
   },
-  port: 80,
+  port: bunServePort,
   hostname: "0.0.0.0"
 });
 
