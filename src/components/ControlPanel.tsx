@@ -5,6 +5,8 @@ import Tabs from 'react-bootstrap/Tabs';
 
 import Sequences from "@/components/Sequences.tsx";
 import Robots from "@/components/Robots.tsx";
+import Music from "@/components/Music.tsx";
+import Lighting from "@/components/Lighting.tsx";
 
 
 const ControlPanel = () => {
@@ -23,10 +25,10 @@ const ControlPanel = () => {
           <Robots/>
         </Tab>
         <Tab eventKey="music" title="Music">
-          music
+          <Music/>
         </Tab>
         <Tab eventKey="lighting" title="Lighting">
-          lighting
+          <Lighting/>
         </Tab>
       </Tabs>
     </Container>

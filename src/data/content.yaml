@@ -1,3 +1,4 @@
+# icons from https://icons.getbootstrap.com/
 sequencePanel:
   buttons:
     - id: button_choose_worker
@@ -115,6 +116,11 @@ robotsPanel:
       iconName: arrow-right-square
       variant: outline-primary
       taskId: task_mqtt_robots_step
+    - id: button_robots_calibrate
+      title: Calibrate
+      iconName: rulers
+      variant: outline-warning
+      taskId: task_mqtt_robots_calibrate
     - id: button_robots_die
       title: Die
       iconName: emoji-dizzy-fill
@@ -125,6 +131,20 @@ robotsPanel:
       iconName: x-circle-fill
       variant: outline-danger
       taskId: task_mqtt_robots_reset
+musicPanel:
+  buttons:
+    - id: button_music_worker_chant
+      title: Workers Chant
+      iconName: megaphone-fill
+      variant: outline-primary
+      taskId: task_osc_music_chant
+lightingPanel:
+  buttons:
+    - id: button_lighting_opacity_test
+      title: Test Opacity
+      iconName: lightbulb-fill
+      variant: outline-primary
+      taskId: task_osc_test_opacity
 tasks:
   - taskType: mqtt
     id: task_mqtt_robots_happy
@@ -186,6 +206,22 @@ tasks:
     topic: robots/action
     clientTopic: robots/{id}/action
     command: step
+  - taskType: mqtt
+    id: task_mqtt_robots_calibrate
+    title: "Robots: Calibrate 📏"
+    topic: robots/action
+    clientTopic: robots/{id}/action
+    command: calib
+  - taskType: osc
+    id: task_osc_test_opacity
+    title: "Test Opacity 💡"
+    address: /composition/layers/1/video/opacity
+    value: 0.25
+  - taskType: osc
+    id: task_osc_music_chant
+    title: "Workers Chant 📢"
+    address: /triggers/workers_chant
+    value: 1
 sequences:
   - id: sequence_choose_workers
     title: "Choose Workers 👷‍♀️"
