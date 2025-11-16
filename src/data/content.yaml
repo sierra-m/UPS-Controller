@@ -133,18 +133,48 @@ robotsPanel:
       taskId: task_mqtt_robots_reset
 musicPanel:
   buttons:
-    - id: button_music_worker_chant
-      title: Workers Chant
+    - id: button_music_intro
+      title: Intro
+      iconName: 1-square-fill
+      variant: outline-primary
+      taskId: task_osc_intro
+    - id: button_music_working
+      title: Working
+      iconName: hammer
+      variant: outline-primary
+      taskId: task_osc_working
+    - id: button_music_protesting
+      title: Protesting
       iconName: megaphone-fill
       variant: outline-primary
-      taskId: task_osc_music_chant
+      taskId: task_osc_protesting
+    - id: button_music_pinkerton
+      title: Pinkerton
+      iconName: emoji-angry-fill
+      variant: outline-primary
+      taskId: task_osc_pinkerton
+    - id: button_music_slowdeath
+      title: Slowdeath
+      iconName: emoji-frown-fill
+      variant: outline-primary
+      taskId: task_osc_slowdeath
+    - id: button_music_winning
+      title: Winning
+      iconName: emoji-laughing
+      variant: outline-primary
+      taskId: task_osc_winning
+    - id: button_music_murder
+      title: Murder
+      iconName: emoji-dizzy-fill
+      variant: outline-primary
+      taskId: task_osc_murder
 lightingPanel:
   buttons:
     - id: button_lighting_opacity_test
-      title: Test Opacity
+      title: Test Trigger
       iconName: lightbulb-fill
       variant: outline-primary
-      taskId: task_osc_test_opacity
+      taskId: task_osc_test_trigger
 tasks:
   - taskType: mqtt
     id: task_mqtt_robots_happy
@@ -213,15 +243,40 @@ tasks:
     clientTopic: robots/{id}/action
     command: calib
   - taskType: osc
-    id: task_osc_test_opacity
-    title: "Test Opacity 💡"
-    address: /composition/layers/1/video/opacity
-    value: 0.25
+    id: task_osc_intro
+    title: "Intro"
+    address: /composition/columns/1/connect
+    value: 1 
   - taskType: osc
-    id: task_osc_music_chant
-    title: "Workers Chant 📢"
-    address: /triggers/workers_chant
-    value: 1
+    id: task_osc_working
+    title: "Working"
+    address: /composition/columns/2/connect
+    value: 1 
+  - taskType: osc
+    id: task_osc_protesting
+    title: "Protesting"
+    address: /composition/columns/3/connect
+    value: 1 
+  - taskType: osc
+    id: task_osc_pinkerton
+    title: "Pinkerton"
+    address: /composition/columns/4/connect
+    value: 1 
+  - taskType: osc
+    id: task_osc_slowdeath
+    title: "Slowdeath"
+    address: /composition/columns/5/connect
+    value: 1 
+  - taskType: osc
+    id: task_osc_winning
+    title: "Winning"
+    address: /composition/columns/6/connect
+    value: 1 
+  - taskType: osc
+    id: task_osc_murder
+    title: "Murder"
+    address: /composition/columns/7/connect
+    value: 1 
 sequences:
   - id: sequence_choose_workers
     title: "Choose Workers 👷‍♀️"
