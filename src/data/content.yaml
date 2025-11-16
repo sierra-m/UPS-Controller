@@ -20,7 +20,6 @@ sequencePanel:
       title: Reset
       iconName: x-circle-fill
       variant: outline-danger
-      taskId: task_mqtt_robots_reset
       sequenceId: sequence_reset
     - id: button_choose_scab
       title: Chooses Scab
