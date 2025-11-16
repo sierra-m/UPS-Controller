@@ -48,6 +48,7 @@ sequencePanel:
       selectableIds:
         - button_choose_worker
         - button_choose_scab
+        - button_reset
     - id: state_worker_choices
       title: Worker Choices
       selectableIds:
