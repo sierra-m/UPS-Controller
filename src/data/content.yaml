@@ -179,11 +179,16 @@ musicPanel:
       taskId: task_osc_murder
 lightingPanel:
   buttons:
-    - id: button_lighting_opacity_test
-      title: Test Trigger
+    - id: button_lighting_start_lights
+      title: Start Lights
       iconName: lightbulb-fill
       variant: outline-primary
-      taskId: task_osc_test_trigger
+      taskId: task_osc_start_lights
+    - id: button_lighting_party_lights
+      title: Party Lights
+      iconName: lightbulb-fill
+      variant: outline-primary
+      taskId: task_osc_party_lights
 tasks:
   - taskType: mqtt
     id: task_mqtt_robots_happy
@@ -296,6 +301,16 @@ tasks:
     title: "Start Timer"
     address: /composition/layers/7/clips/11/connect
     value: 1 
+  - taskType: osc
+    id: task_osc_start_lights
+    title: "Start Lights"
+    address: /live/Control_Panel/cue/Blue__Red__Yellow/activate
+    value: 1 
+  - taskType: osc
+    id: task_osc_party_lights
+    title: "Party Lights"
+    address: /live/Control_Panel/cue/Confetti/activate
+    value: 1 
 sequences:
   - id: sequence_choose_workers
     title: "Choose Workers 👷‍♀️"
@@ -311,6 +326,7 @@ sequences:
     title: "Help Union 💪"
     taskIds:
       - task_osc_winning
+      - task_osc_party_lights
   - id: sequence_reject_union
     title: "Reject Union 👎"
     taskIds:
@@ -331,8 +347,10 @@ sequences:
     taskIds:
       - task_osc_dance
       - task_mqtt_robots_happy
+      - task_osc_party_lights
   - id: sequence_reset
     title: "Reset ❌"
     taskIds:
       - task_osc_intro
       - task_osc_start_timer
+      - task_osc_start_lights
