@@ -294,7 +294,7 @@ tasks:
   - taskType: osc
     id: task_osc_start_timer
     title: "Start Timer"
-    address: /composition/layers/7/clips/11/select
+    address: /composition/layers/7/clips/11/connect
     value: 1 
 sequences:
   - id: sequence_choose_workers
