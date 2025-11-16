@@ -24,22 +24,22 @@ sequencePanel:
     - id: button_choose_scab
       title: Chooses Scab
       iconName: emoji-frown-fill
-      variant: outline-warning
+      variant: outline-primary
       sequenceId: sequence_choose_scab
     - id: button_reject_union
       title: Reject Union
       iconName: hand-thumbs-down-fill
-      variant: outline-warning
+      variant: outline-primary
       sequenceId: sequence_reject_union
     - id: button_destroy_union
       title: Destroy Union
       iconName: fire
-      variant: outline-warning
+      variant: outline-primary
       sequenceId: sequence_destroy_union
     - id: button_dna_cedes
       title: DNA Cedes
       iconName: stars
-      variant: outline-warning
+      variant: outline-primary
       sequenceId: sequence_dna_cedes
   # States available and which buttons are selectable during each
   buttonStates:
