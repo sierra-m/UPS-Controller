@@ -7,3 +7,4 @@ export const bunServePort = process.env.BUN_SERVE_PORT || 80;
 export const useOscClient = process.env.USE_OSC_CLIENT ? process.env.USE_OSC_CLIENT === 'true' : false;
 export const oscHost = process.env.OSC_HOST || 'localhost';
 export const oscPort = process.env.OSC_PORT ? parseInt(process.env.OSC_PORT) : 3333;
+export const oscPortSec = process.env.OSC_PORT_SEC ? parseInt(process.env.OSC_PORT_SEC) : 3333;

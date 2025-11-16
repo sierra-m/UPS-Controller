@@ -17,7 +17,8 @@ import {
   bunServePort,
   useOscClient,
   oscHost,
-  oscPort
+  oscPort,
+  oscPortSec
 } from "@/config.ts";
 import type {TaskType} from "@/data/schema.ts";
 
@@ -49,8 +50,10 @@ mqttClient.on('message', (topic, payload) => {
 });
 
 let oscClient: OscClient;
+let oscClientSec: OscClient;
 if (useOscClient) {
   oscClient = new OscClient(oscHost, oscPort);
+  oscClientSec = new OscClient(oscHost, oscPortSec);
 }
 
 const actionRequestSchema: JSONSchemaType<ActionRequest> = {
@@ -103,9 +106,16 @@ const runTask = async (id: string, clientIds: string[] = []) => {
       if (useOscClient && oscClient) {
         oscClient.send(foundTask.address, foundTask.value, (err: Error | null) => {
           if (err) {
-            console.error(`OSC message failed to send: ${err}`);
+            console.error(`OSC (PRI) message failed to send: ${err}`);
           } else {
-            console.log(`OSC: Sent value '${foundTask.value}' to address '${foundTask.address}'`)
+            console.log(`OSC (PRI): Sent value '${foundTask.value}' to address '${foundTask.address}'`)
+          }
+        });
+        oscClientSec.send(foundTask.address, foundTask.value, (err: Error | null) => {
+          if (err) {
+            console.error(`OSC (SEC) message failed to send: ${err}`);
+          } else {
+            console.log(`OSC (SEC): Sent value '${foundTask.value}' to address '${foundTask.address}'`)
           }
         });
       } else {
