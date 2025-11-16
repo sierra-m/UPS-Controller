@@ -332,17 +332,14 @@ sequences:
     title: "Reject Union 👎"
     taskIds:
       - task_osc_murder
-      - task_mqtt_robots_die
   - id: sequence_union_slowdeath
     title: "Union Slowdeath 🙁"
     taskIds:
       - task_osc_slowdeath
-      - task_mqtt_robots_die
   - id: sequence_destroy_union
     title: "Destroy Union 💀"
     taskIds:
       - task_osc_pinkerton
-      - task_mqtt_robots_die
   - id: sequence_dna_cedes
     title: "DNA Cedes 🎉"
     taskIds:
