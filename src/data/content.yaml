@@ -6,20 +6,22 @@ sequencePanel:
       iconName: emoji-smile-fill
       variant: outline-primary
       sequenceId: sequence_choose_workers
-    - id: button_help_union
-      title: Help Union
+    - id: button_union_takeover
+      title: Union Takeover
       iconName: hand-thumbs-up-fill
       variant: outline-primary
       sequenceId: sequence_help_union
-    - id: button_join_union
-      title: Join Union
-      iconName: hammer
+    - id: button_union_slowdeath
+      title: Union Slowdeath
+      iconName: emoji-frown-fill
       variant: outline-primary
+      sequenceId: sequence_union_slowdeath
     - id: button_reset
       title: Reset
       iconName: x-circle-fill
       variant: outline-danger
       taskId: task_mqtt_robots_reset
+      sequenceId: sequence_reset
     - id: button_choose_scab
       title: Chooses Scab
       iconName: emoji-frown-fill
@@ -29,12 +31,17 @@ sequencePanel:
       title: Reject Union
       iconName: hand-thumbs-down-fill
       variant: outline-warning
-      sequenceId: sequence_union_dies
+      sequenceId: sequence_reject_union
     - id: button_destroy_union
       title: Destroy Union
       iconName: fire
       variant: outline-warning
-      sequenceId: sequence_union_dies
+      sequenceId: sequence_destroy_union
+    - id: button_dna_cedes
+      title: DNA Cedes
+      iconName: stars
+      variant: outline-warning
+      sequenceId: sequence_dna_cedes
   # States available and which buttons are selectable during each
   buttonStates:
     - id: state_choose_side
@@ -45,14 +52,15 @@ sequencePanel:
     - id: state_worker_choices
       title: Worker Choices
       selectableIds:
-        - button_help_union
+        - button_union_takeover
         - button_reject_union
         - button_reset
     - id: state_scab_choices
       title: Scab Choices
       selectableIds:
-        - button_join_union
+        - button_union_slowdeath
         - button_destroy_union
+        - button_dna_cedes
         - button_reset
     - id: state_end
       title: Flow End
@@ -64,13 +72,15 @@ sequencePanel:
       nextStateId: state_worker_choices
     - buttonId: button_choose_scab
       nextStateId: state_scab_choices
-    - buttonId: button_help_union
+    - buttonId: button_union_takeover
       nextStateId: state_end
     - buttonId: button_reject_union
       nextStateId: state_end
-    - buttonId: button_join_union
+    - buttonId: button_union_slowdeath
       nextStateId: state_end
     - buttonId: button_destroy_union
+      nextStateId: state_end
+    - buttonId: button_dna_cedes
       nextStateId: state_end
     - buttonId: button_reset
       nextStateId: state_choose_side
@@ -277,21 +287,53 @@ tasks:
     title: "Murder"
     address: /composition/columns/7/connect
     value: 1 
+  - taskType: osc
+    id: task_osc_dance
+    title: "Dance"
+    address: /composition/columns/9/connect
+    value: 1 
+  - taskType: osc
+    id: task_osc_start_timer
+    title: "Start Timer"
+    address: /composition/columns/11/connect
+    value: 1 
 sequences:
   - id: sequence_choose_workers
     title: "Choose Workers 👷‍♀️"
     taskIds:
       - task_mqtt_robots_happy
+      - task_osc_protesting
   - id: sequence_choose_scab
     title: "Choose Scab 💰"
     taskIds:
       - task_mqtt_robots_angry
+      - task_osc_working
   - id: sequence_help_union
     title: "Help Union 💪"
     taskIds:
-      - task_mqtt_robots_happy
-      - task_mqtt_robots_drop_signs
-  - id: sequence_union_dies
-    title: "Union Dies 😵"
+      - task_osc_winning
+  - id: sequence_reject_union
+    title: "Reject Union 👎"
     taskIds:
+      - task_osc_murder
       - task_mqtt_robots_die
+  - id: sequence_union_slowdeath
+    title: "Union Slowdeath 🙁"
+    taskIds:
+      - task_osc_slowdeath
+      - task_mqtt_robots_die
+  - id: sequence_destroy_union
+    title: "Destroy Union 💀"
+    taskIds:
+      - task_osc_pinkerton
+      - task_mqtt_robots_die
+  - id: sequence_dna_cedes
+    title: "DNA Cedes 🎉"
+    taskIds:
+      - task_osc_dance
+      - task_mqtt_robots_happy
+  - id: sequence_reset
+    title: "Reset ❌"
+    taskIds:
+      - task_osc_intro
+      - task_osc_start_timer
