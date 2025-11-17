@@ -2,7 +2,7 @@
 sequencePanel:
   buttons:
     - id: button_choose_worker
-      title: Chooses Worker
+      title: Chooses Protest
       iconName: emoji-smile-fill
       variant: outline-primary
       sequenceId: sequence_choose_workers
