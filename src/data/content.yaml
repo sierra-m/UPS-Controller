@@ -11,16 +11,15 @@ sequencePanel:
       iconName: hand-thumbs-up-fill
       variant: outline-primary
       sequenceId: sequence_help_union
-    - id: button_union_slowdeath
-      title: Union Slowdeath
-      iconName: emoji-frown-fill
+    - id: button_stop_scabbing
+      title: Stop Scabbing
+      iconName: person-fill-slash
       variant: outline-primary
-      sequenceId: sequence_union_slowdeath
-    - id: button_reset
-      title: Reset
-      iconName: x-circle-fill
-      variant: outline-danger
-      sequenceId: sequence_reset
+    - id: button_protest_forever
+      title: Protest Forever
+      iconName: emoji-tear-fill
+      variant: outline-primary
+      sequenceId: sequence_protest_forever
     - id: button_choose_scab
       title: Chooses Scab
       iconName: emoji-frown-fill
@@ -41,6 +40,11 @@ sequencePanel:
       iconName: stars
       variant: outline-primary
       sequenceId: sequence_dna_cedes
+    - id: button_reset
+      title: Reset
+      iconName: x-circle-fill
+      variant: outline-danger
+      sequenceId: sequence_reset
   # States available and which buttons are selectable during each
   buttonStates:
     - id: state_choose_side
@@ -50,16 +54,21 @@ sequencePanel:
         - button_choose_scab
         - button_reset
     - id: state_worker_choices
-      title: Worker Choices
+      title: Communism?
       selectableIds:
         - button_union_takeover
         - button_reject_union
         - button_reset
     - id: state_scab_choices
-      title: Scab Choices
+      title: Stop Scabbin?
       selectableIds:
-        - button_union_slowdeath
+        - button_stop_scabbing
         - button_destroy_union
+        - button_reset
+    - id: state_stop_scab_choices
+      title: DNA Cedes?
+      selectableIds:
+        - button_protest_forever
         - button_dna_cedes
         - button_reset
     - id: state_end
@@ -76,9 +85,11 @@ sequencePanel:
       nextStateId: state_end
     - buttonId: button_reject_union
       nextStateId: state_end
-    - buttonId: button_union_slowdeath
-      nextStateId: state_end
+    - buttonId: button_stop_scabbing
+      nextStateId: state_stop_scab_choices
     - buttonId: button_destroy_union
+      nextStateId: state_end
+    - buttonId: button_protest_forever
       nextStateId: state_end
     - buttonId: button_dna_cedes
       nextStateId: state_end
@@ -332,7 +343,7 @@ sequences:
     title: "Reject Union 👎"
     taskIds:
       - task_osc_murder
-  - id: sequence_union_slowdeath
+  - id: sequence_protest_forever
     title: "Union Slowdeath 🙁"
     taskIds:
       - task_osc_slowdeath
