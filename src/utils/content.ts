@@ -1,5 +1,10 @@
 import {Ajv} from "ajv";
-import {type ControlPanelContent, type ControlSequence, type ControlTask} from "@/data/schema.ts";
+import {
+  type ControlPanelContent,
+  type ControlSequence,
+  type ControlTask,
+  type TileButtonContent
+} from "@/data/schema.ts";
 import schema from "@/data/schema.json";
 import content from '@/data/content.yaml';
 
@@ -49,6 +54,7 @@ for (const sequence of content.sequences) {
 }
 
 const sequenceButtonIds = content.sequencePanel.buttons.map((button) => button.id);
+export const sequenceButtonsMap = new Map<string, TileButtonContent>(content.sequencePanel.buttons.map(button => [button.id, button]));
 
 const buttonIds = sequenceButtonIds;
 
