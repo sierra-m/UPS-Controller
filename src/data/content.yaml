@@ -49,30 +49,35 @@ sequencePanel:
   buttonStates:
     - id: state_choose_side
       title: Choose Side
+      prompt: Which side do you choose?
       selectableIds:
         - button_choose_worker
         - button_choose_scab
         - button_reset
     - id: state_worker_choices
       title: Communism?
+      prompt: Accept a union takeover?
       selectableIds:
         - button_union_takeover
         - button_reject_union
         - button_reset
     - id: state_scab_choices
       title: Stop Scabbin?
+      prompt: Stop scabbing and join the protest?
       selectableIds:
         - button_stop_scabbing
         - button_destroy_union
         - button_reset
     - id: state_stop_scab_choices
       title: DNA Cedes?
+      prompt: Does the protest succeed?
       selectableIds:
         - button_protest_forever
         - button_dna_cedes
         - button_reset
     - id: state_end
       title: Flow End
+      prompt: You have reached the end. Reset?
       selectableIds:
         - button_reset
   # State selection order

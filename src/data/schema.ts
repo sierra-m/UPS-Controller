@@ -3,6 +3,7 @@ import type {ButtonVariant} from "react-bootstrap/types";
 export interface ButtonState {
   id: string;
   title: string;
+  prompt?: string;
   selectableIds: string[];
 }
 
