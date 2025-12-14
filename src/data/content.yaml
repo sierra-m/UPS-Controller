@@ -328,6 +328,21 @@ tasks:
     title: "Party Lights"
     address: /live/Control_Panel/cue/Confetti/activate
     value: 1 
+  - taskType: osc
+    id: task_osc_exit
+    title: "Exit"
+    address: /composition/columns/8/connect
+    value: 1 
+  - taskType: osc
+    id: task_osc_dead_exit
+    title: "Dead Exit"
+    address: /composition/columns/13/connect
+    value: 1 
+  - taskType: osc
+    id: task_osc_resurrection
+    title: "Resurrection"
+    address: /composition/columns/10/connect
+    value: 1 
 sequences:
   - id: sequence_choose_workers
     title: "Choose Workers 👷‍♀️"
@@ -344,27 +359,33 @@ sequences:
     taskIds:
       - task_osc_winning
       - task_osc_party_lights
+      - task_mqtt_robots_halt
   - id: sequence_reject_union
     title: "Reject Union 👎"
     taskIds:
       - task_osc_murder
+      - task_mqtt_robots_halt
   - id: sequence_protest_forever
     title: "Union Slowdeath 🙁"
     taskIds:
       - task_osc_slowdeath
+      - task_mqtt_robots_halt
   - id: sequence_destroy_union
     title: "Destroy Union 💀"
     taskIds:
       - task_osc_pinkerton
+      - task_mqtt_robots_halt
   - id: sequence_dna_cedes
     title: "DNA Cedes 🎉"
     taskIds:
       - task_osc_dance
       - task_mqtt_robots_happy
       - task_osc_party_lights
+      - task_mqtt_robots_halt
   - id: sequence_reset
     title: "Reset ❌"
     taskIds:
       - task_osc_intro
       - task_osc_start_timer
       - task_osc_start_lights
+      - task_mqtt_robots_march
